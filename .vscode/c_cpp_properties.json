@@ -1,0 +1,22 @@
+{
+    "env": {},
+    "configurations": [
+        {
+            "name": "Gstreamer",
+            "intelliSenseMode": "gcc-x64",
+            "includePath": [
+                "/usr/include/gstreamer-1.0/**",
+                "/usr/include/glib-2.0/**"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "browse": {
+                "path": [],
+                "limitSymbolsToIncludedHeaders": false,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}
