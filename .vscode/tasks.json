@@ -6,9 +6,10 @@
             "type": "shell",
             "command": "gcc",
             "args": [
+                "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}",
+                "${fileDirname}/${fileBasenameNoExtension}.o",
                 "`pkg-config", "--libs", "--cflags", "gstreamer-1.0`"
             ],
             "group": {
