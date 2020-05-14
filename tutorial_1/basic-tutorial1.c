@@ -1,6 +1,7 @@
 #include <gst/gst.h>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     GstElement *pipeline;
     GstBus *bus;
     GstMessage *msg;
@@ -16,7 +17,8 @@ int main(int argc, char *argv[]) {
     bus = gst_element_get_bus(pipeline);
     msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
 
-    if (msg != NULL) {
+    if (msg != NULL)
+    {
         gst_message_unref(msg);
     }
 
