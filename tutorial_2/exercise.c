@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     if (!pipeline || !source || !sink || !filter)
     {
-        g_printerr("Not all elements could be created.\n");
+        g_error("Not all elements could be created.\n");
 
         return -1;
     }
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     if (gst_element_link_many(source, filter, sink, NULL))
     {
-        g_printerr("Elements could not be linked.\n");
+        g_error("Elements could not be linked.\n");
         gst_object_unref(pipeline);
 
         return -1;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     if (ret == GST_STATE_CHANGE_FAILURE)
     {
-        g_printerr("Unable to set the pipeline to the playing state.\n");
+        g_error("Unable to set the pipeline to the playing state.\n");
         gst_object_unref(pipeline);
 
         return -1;
@@ -61,21 +61,21 @@ int main(int argc, char *argv[])
         {
         case GST_MESSAGE_ERROR:
             gst_message_parse_error(msg, &err, &debug_info);
-            g_printerr("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src), err->message);
-            g_printerr("Debugging information: %s\n", debug_info ? debug_info : "none");
+            g_error("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src), err->message);
+            g_error("Debugging information: %s\n", debug_info ? debug_info : "none");
             g_clear_error(&err);
             g_free(debug_info);
 
             break;
 
         case GST_MESSAGE_EOS:
-            g_print("End-of-Stream reached.\n");
+            g_message("End-of-Stream reached.\n");
 
             break;
 
         default:
             /* We should not reach here because we only asked for ERRORs and EOS */
-            g_printerr("Unexpected message received.\n");
+            g_error("Unexpected message received.\n");
 
             break;
         }
