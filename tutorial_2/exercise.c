@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     /* Build the pipeline */
     gst_bin_add_many(GST_BIN(pipeline), source, filter, sink, NULL);
 
-    if (gst_element_link_many(source, filter, sink, NULL))
+    if (!gst_element_link_many(source, filter, sink, NULL))
     {
         g_error("Elements could not be linked.\n");
         gst_object_unref(pipeline);
