@@ -1,0 +1,83 @@
+digraph pipeline {
+  rankdir=LR;
+  fontname="sans";
+  fontsize="10";
+  labelloc=t;
+  nodesep=.1;
+  ranksep=.2;
+  label="<GstPlayBin>\nplaybin0";
+  node [style="filled,rounded", shape=box, fontsize="9", fontname="sans", margin="0.0,0.0"];
+  edge [labelfontsize="6", fontsize="9", fontname="monospace"];
+  
+  legend [
+    pos="0,0!",
+    margin="0.05,0.05",
+    style="filled",
+    label="Legend\lElement-States: [~] void-pending, [0] null, [-] ready, [=] paused, [>] playing\lPad-Activation: [-] none, [>] push, [<] pull\lPad-Flags: [b]locked, [f]lushing, [b]locking, [E]OS; upper-case is set\lPad-Task: [T] has started task, [t] has paused task\l",
+  ];
+  subgraph cluster_uridecodebin0_0x5605815960b0 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstURIDecodeBin\nuridecodebin0";
+    fillcolor="#ffffff";
+    subgraph cluster_typefindelement0_0x5605815c1050 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstTypeFindElement\ntypefindelement0";
+      subgraph cluster_typefindelement0_0x5605815c1050_sink {
+        label="";
+        style="invis";
+        typefindelement0_0x5605815c1050_sink_0x5605815bc3e0 [color=black, fillcolor="#aaaaff", label="sink", height="0.2", style="filled,solid"];
+      }
+
+      subgraph cluster_typefindelement0_0x5605815c1050_src {
+        label="";
+        style="invis";
+        typefindelement0_0x5605815c1050_src_0x5605815bc630 [color=black, fillcolor="#ffaaaa", label="src", height="0.2", style="filled,solid"];
+      }
+
+      typefindelement0_0x5605815c1050_sink_0x5605815bc3e0 -> typefindelement0_0x5605815c1050_src_0x5605815bc630 [style="invis"];
+      fillcolor="#aaffaa";
+    }
+
+    subgraph cluster_source_0x5605815ba4e0 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstSoupHTTPSrc\nsource";
+      subgraph cluster_source_0x5605815ba4e0_src {
+        label="";
+        style="invis";
+        source_0x5605815ba4e0_src_0x5605815bc190 [color=black, fillcolor="#ffaaaa", label="src", height="0.2", style="filled,solid"];
+      }
+
+      fillcolor="#ffaaaa";
+    }
+
+    source_0x5605815ba4e0_src_0x5605815bc190 -> typefindelement0_0x5605815c1050_sink_0x5605815bc3e0 [label="*"]
+  }
+
+  subgraph cluster_playsink_0x560581590050 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstPlaySink\nplaysink";
+    fillcolor="#ffffff";
+    subgraph cluster_streamsynchronizer0_0x5605815920c0 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstStreamSynchronizer\nstreamsynchronizer0";
+      fillcolor="#ffffff";
+    }
+
+  }
+
+}

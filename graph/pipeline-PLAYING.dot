@@ -1,0 +1,83 @@
+digraph pipeline {
+  rankdir=LR;
+  fontname="sans";
+  fontsize="10";
+  labelloc=t;
+  nodesep=.1;
+  ranksep=.2;
+  label="<GstPlayBin>\nplaybin0\n[-] -> [>]\ncurrent-uri=\"https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-4…\nsource=(GstSoupHTTPSrc) source";
+  node [style="filled,rounded", shape=box, fontsize="9", fontname="sans", margin="0.0,0.0"];
+  edge [labelfontsize="6", fontsize="9", fontname="monospace"];
+  
+  legend [
+    pos="0,0!",
+    margin="0.05,0.05",
+    style="filled",
+    label="Legend\lElement-States: [~] void-pending, [0] null, [-] ready, [=] paused, [>] playing\lPad-Activation: [-] none, [>] push, [<] pull\lPad-Flags: [b]locked, [f]lushing, [b]locking, [E]OS; upper-case is set\lPad-Task: [T] has started task, [t] has paused task\l",
+  ];
+  subgraph cluster_uridecodebin0_0x560c5fa9a0b0 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstURIDecodeBin\nuridecodebin0\n[-] -> [=]\nparent=(GstPlayBin) playbin0\nuri=\"https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-4…\nsource=(GstSoupHTTPSrc) source\ncaps=video/x-raw(ANY); audio/x-raw(ANY); text/x-raw(ANY); subpicture/x-dvd; subpictur…";
+    fillcolor="#ffffff";
+    subgraph cluster_typefindelement0_0x560c5fac6050 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstTypeFindElement\ntypefindelement0\n[=]\nparent=(GstURIDecodeBin) uridecodebin0";
+      subgraph cluster_typefindelement0_0x560c5fac6050_sink {
+        label="";
+        style="invis";
+        typefindelement0_0x560c5fac6050_sink_0x560c5fac03e0 [color=black, fillcolor="#aaaaff", label="sink\n[>][bfb]", height="0.2", style="filled,solid"];
+      }
+
+      subgraph cluster_typefindelement0_0x560c5fac6050_src {
+        label="";
+        style="invis";
+        typefindelement0_0x560c5fac6050_src_0x560c5fac0630 [color=black, fillcolor="#ffaaaa", label="src\n[>][bfb]", height="0.2", style="filled,solid"];
+      }
+
+      typefindelement0_0x560c5fac6050_sink_0x560c5fac03e0 -> typefindelement0_0x560c5fac6050_src_0x560c5fac0630 [style="invis"];
+      fillcolor="#aaffaa";
+    }
+
+    subgraph cluster_source_0x560c5fabf4e0 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstSoupHTTPSrc\nsource\n[=]\nparent=(GstURIDecodeBin) uridecodebin0\nlocation=\"https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-4…\nuser-id=NULL\nuser-pw=NULL\nproxy-id=NULL\nproxy-pw=NULL";
+      subgraph cluster_source_0x560c5fabf4e0_src {
+        label="";
+        style="invis";
+        source_0x560c5fabf4e0_src_0x560c5fac0190 [color=black, fillcolor="#ffaaaa", label="src\n[>][bfb][T]", height="0.2", style="filled,solid"];
+      }
+
+      fillcolor="#ffaaaa";
+    }
+
+    source_0x560c5fabf4e0_src_0x560c5fac0190 -> typefindelement0_0x560c5fac6050_sink_0x560c5fac03e0 [label="ANY"]
+  }
+
+  subgraph cluster_playsink_0x560c5fa94050 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstPlaySink\nplaysink\n[-] -> [=]\nparent=(GstPlayBin) playbin0\nflags=video+audio+text+soft-volume+deinterlace+soft-colorbalance\nsend-event-mode=first";
+    fillcolor="#ffffff";
+    subgraph cluster_streamsynchronizer0_0x560c5fa960c0 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstStreamSynchronizer\nstreamsynchronizer0\n[=]\nparent=(GstPlaySink) playsink";
+      fillcolor="#ffffff";
+    }
+
+  }
+
+}
