@@ -4,7 +4,8 @@ typedef struct _CustomData
 {
     GstElement *pipeline;
     GstElement *source;
-    GstElement *convert;
+    GstElement *audio_convert;
+    GstElement *video_convert;
     GstElement *resample;
     GstElement *sink;
 } CustomData;
@@ -24,14 +25,15 @@ int main(int argc, char *argv[])
 
     /* Create the elements */
     data.source = gst_element_factory_make("uridecodebin", "source");
-    data.convert = gst_element_factory_make("audioconvert", "convert");
+    data.audio_convert = gst_element_factory_make("audioconvert", "audio-convert");
+    data.video_convert = gst_element_factory_make("videoconvert", "video-convert");
     data.resample = gst_element_factory_make("audioresample", "resample");
     data.sink = gst_element_factory_make("autoaudiosink", "sink");
 
     /* Create the empty pipeline */
     data.pipeline = gst_pipeline_new("test-pipeline");
 
-    if (!data.pipeline || !data.source || !data.convert || !data.resample || !data.sink)
+    if (!data.pipeline || !data.source || !data.audio_convert || !data.video_convert || !data.resample || !data.sink)
     {
         g_error("Not all elements could be created.\n");
 
@@ -40,8 +42,8 @@ int main(int argc, char *argv[])
 
     /* Build the pipeline. Note that we are NOT linking the source at this
      * point. We will do it later. */
-    gst_bin_add_many(GST_BIN(data.pipeline), data.source, data.convert, data.resample, data.sink, NULL);
-    if (!gst_element_link_many(data.convert, data.resample, data.sink, NULL))
+    gst_bin_add_many(GST_BIN(data.pipeline), data.source, data.audio_convert, data.resample, data.sink, NULL);
+    if (!gst_element_link_many(data.audio_convert, data.resample, data.sink, NULL))
     {
         g_error("Elements could not be linked.\n");
         gst_object_unref(data.pipeline);
@@ -106,15 +108,6 @@ int main(int argc, char *argv[])
                     gst_message_parse_state_changed(msg, &old_state, &new_state, &pending_state);
                     g_message("Pipeline state changed from %s to %s:\n",
                               gst_element_state_get_name(old_state), gst_element_state_get_name(new_state));
-
-                    /* Create graph per state change */
-                    GString *base_fname = g_string_new("");
-                    g_string_printf(base_fname, "pipeline-%s-%s", gst_element_state_get_name(old_state), gst_element_state_get_name(new_state));
-
-                    GstBin *bin = GST_BIN(data.pipeline);
-                    GST_DEBUG_BIN_TO_DOT_FILE(bin, GST_DEBUG_GRAPH_SHOW_ALL, base_fname->str);
-
-                    g_string_free(base_fname, TRUE);
                 }
 
                 break;
@@ -141,7 +134,7 @@ int main(int argc, char *argv[])
 /* This function will be called by the pad-added signal */
 static void pad_add_handler(GstElement *src, GstPad *new_pad, CustomData *data)
 {
-    GstPad *sink_pad = gst_element_get_static_pad(data->convert, "sink");
+    GstPad *sink_pad = gst_element_get_static_pad(data->audio_convert, "sink");
     GstPadLinkReturn ret;
     GstCaps *new_pad_caps = NULL;
     GstStructure *new_pad_struct = NULL;
