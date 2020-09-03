@@ -1,3 +1,9 @@
+# Visual Studio 2019 cache/options directory
+.vs/
+
+# Add this line
+out/
+
 *.o
 build/
 *test*/
