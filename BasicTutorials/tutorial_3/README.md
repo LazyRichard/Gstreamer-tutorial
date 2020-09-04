@@ -189,8 +189,7 @@ State|Description
 ---|---
 `GST_STATE_NULL`|NULL 상태 또는 element의 초기 상태
 `GST_STATE_READY`|element가 준비되어서 PAUSED로 가는 상태.
-`GST_STATE_PAUSED`|element가 PAUSED 된 상태로 데이터를 받아들이고 가공할 준비가 된 상태이다.
-하지만 sink element는 오직 하나의 버퍼만 받고 블럭한다.
+`GST_STATE_PAUSED`|element가 PAUSED 된 상태로 데이터를 받아들이고 가공할 준비가 된 상태이다. 하지만 sink element는 오직 하나의 버퍼만 받고 블럭한다.
 `GST_STATE_PLAYING`|element가 PLAYING 상태로 클럭이 돌고 데이터가 흐른다.
 
 상태는 한 칸씩만 이동할 수 있다. 즉 `GST_STATE_NULL`에서 `GST_STATE_PLAYING`으로 건너뛸 수 없고
