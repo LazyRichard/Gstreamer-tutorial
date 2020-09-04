@@ -1,5 +1,4 @@
 {
-    "env": {},
     "configurations": [
         {
             "name": "Gstreamer",
@@ -16,6 +15,10 @@
                 "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": ""
             }
+        },
+        {
+            "name": "GStreamer-MSVC2",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4
