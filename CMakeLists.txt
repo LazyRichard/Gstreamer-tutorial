@@ -24,7 +24,4 @@ include_directories(${GST_INCLUDE_DIRS})
 
 
 # Include sub-projects.
-add_subdirectory ("tutorial_1")
-add_subdirectory ("tutorial_2")
-add_subdirectory ("tutorial_3")
-add_subdirectory ("tutorial_4")
+add_subdirectory ("BasicTutorials")
