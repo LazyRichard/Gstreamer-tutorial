@@ -47,8 +47,7 @@ int main(int argc, char *argv[]) {
 
   /* Wait until error or EOS */
   bus = gst_element_get_bus(pipeline);
-  msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE,
-                                   GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
+  msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
 
   /* Parsing message */
   if (msg != NULL) {
@@ -59,8 +58,7 @@ int main(int argc, char *argv[]) {
     case GST_MESSAGE_ERROR:
       gst_message_parse_error(msg, &err, &debug_info);
 
-      g_error("Error received from element %s: %s", GST_OBJECT_NAME(msg->src),
-              err->message);
+      g_error("Error received from element %s: %s", GST_OBJECT_NAME(msg->src), err->message);
       g_error("Debugging information: %s", debug_info ? debug_info : "none");
 
       g_clear_error(&err);
@@ -75,8 +73,7 @@ int main(int argc, char *argv[]) {
 
     default:
       /* We should not reach here because we only asked for ERRORs and EOS */
-      g_error("Unexpected message received message type id: %d",
-              GST_MESSAGE_TYPE(msg));
+      g_error("Unexpected message received message type id: %d", GST_MESSAGE_TYPE(msg));
 
       break;
     }

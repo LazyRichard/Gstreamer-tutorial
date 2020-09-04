@@ -17,8 +17,8 @@
 typedef struct _CustomData {
   GstElement *playbin; /* Our one and only pipeline */
 
-  GtkWidget *slider;       /* Slider widget to keep track of current position */
-  GtkWidget *streams_list; /* Text widget to display info about the streams */
+  GtkWidget *slider;              /* Slider widget to keep track of current position */
+  GtkWidget *streams_list;        /* Text widget to display info about the streams */
   gulong slider_update_signal_id; /* Signal ID for the slider update signal */
 
   GstState state;  /* Current state of the pipeline */
@@ -46,28 +46,20 @@ static void realize_cb(GtkWidget *widget, CustomData *data) {
 #endif
   /* Pass it to playbin, which implements VideoOverlay and will forward it to
    * the video sink */
-  gst_video_overlay_set_window_handle(GST_VIDEO_OVERLAY(data->playbin),
-                                      window_handle);
+  gst_video_overlay_set_window_handle(GST_VIDEO_OVERLAY(data->playbin), window_handle);
 }
 
 /* This function is called when the PLAY button is clicked */
-static void play_cb(GtkButton *button, CustomData *data) {
-  gst_element_set_state(data->playbin, GST_STATE_PLAYING);
-}
+static void play_cb(GtkButton *button, CustomData *data) { gst_element_set_state(data->playbin, GST_STATE_PLAYING); }
 
 /* This function is called when the PAUSE button is clicked */
-static void pause_cb(GtkButton *button, CustomData *data) {
-  gst_element_set_state(data->playbin, GST_STATE_PAUSED);
-}
+static void pause_cb(GtkButton *button, CustomData *data) { gst_element_set_state(data->playbin, GST_STATE_PAUSED); }
 
 /* This function is called when the STOP button is clicked */
-static void stop_cb(GtkButton *button, CustomData *data) {
-  gst_element_set_state(data->playbin, GST_STATE_READY);
-}
+static void stop_cb(GtkButton *button, CustomData *data) { gst_element_set_state(data->playbin, GST_STATE_READY); }
 
 /* This function is called when the main window is closed */
-static void delete_event_cb(GtkWidget *widget, GdkEvent *event,
-                            CustomData *data) {
+static void delete_event_cb(GtkWidget *widget, GdkEvent *event, CustomData *data) {
   stop_cb(NULL, data);
   gtk_main_quit();
 }
@@ -96,50 +88,42 @@ static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, CustomData *data) {
  * seek to the new position here. */
 static void slider_cb(GtkRange *range, CustomData *data) {
   gdouble value = gtk_range_get_value(GTK_RANGE(data->slider));
-  gst_element_seek_simple(data->playbin, GST_FORMAT_TIME,
-                          GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
+  gst_element_seek_simple(data->playbin, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
                           (gint64)(value * GST_SECOND));
 }
 
 /* This creates all the GTK+ widgets that compose our application, and registers
  * the callbacks */
 static void create_ui(CustomData *data) {
-  GtkWidget
-      *main_window; /* The uppermost window, containing all other windows */
-  GtkWidget *video_window; /* The drawing area where the video will be shown */
-  GtkWidget *main_box;     /* VBox to hold main_hbox and the controls */
-  GtkWidget *main_hbox;    /* HBox to hold the video_window and the stream info
-                              text widget */
-  GtkWidget *controls;     /* HBox to hold the buttons and the slider */
+  GtkWidget *main_window;                              /* The uppermost window, containing all other windows */
+  GtkWidget *video_window;                             /* The drawing area where the video will be shown */
+  GtkWidget *main_box;                                 /* VBox to hold main_hbox and the controls */
+  GtkWidget *main_hbox;                                /* HBox to hold the video_window and the stream info
+                                                          text widget */
+  GtkWidget *controls;                                 /* HBox to hold the buttons and the slider */
   GtkWidget *play_button, *pause_button, *stop_button; /* Buttons */
 
   main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  g_signal_connect(G_OBJECT(main_window), "delete-event",
-                   G_CALLBACK(delete_event_cb), data);
+  g_signal_connect(G_OBJECT(main_window), "delete-event", G_CALLBACK(delete_event_cb), data);
 
   video_window = gtk_drawing_area_new();
   gtk_widget_set_double_buffered(video_window, FALSE);
   g_signal_connect(video_window, "realize", G_CALLBACK(realize_cb), data);
   g_signal_connect(video_window, "draw", G_CALLBACK(draw_cb), data);
 
-  play_button = gtk_button_new_from_icon_name("media-playback-start",
-                                              GTK_ICON_SIZE_SMALL_TOOLBAR);
+  play_button = gtk_button_new_from_icon_name("media-playback-start", GTK_ICON_SIZE_SMALL_TOOLBAR);
   g_signal_connect(G_OBJECT(play_button), "clicked", G_CALLBACK(play_cb), data);
 
-  pause_button = gtk_button_new_from_icon_name("media-playback-pause",
-                                               GTK_ICON_SIZE_SMALL_TOOLBAR);
-  g_signal_connect(G_OBJECT(pause_button), "clicked", G_CALLBACK(pause_cb),
-                   data);
+  pause_button = gtk_button_new_from_icon_name("media-playback-pause", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  g_signal_connect(G_OBJECT(pause_button), "clicked", G_CALLBACK(pause_cb), data);
 
-  stop_button = gtk_button_new_from_icon_name("media-playback-stop",
-                                              GTK_ICON_SIZE_SMALL_TOOLBAR);
+  stop_button = gtk_button_new_from_icon_name("media-playback-stop", GTK_ICON_SIZE_SMALL_TOOLBAR);
   g_signal_connect(G_OBJECT(stop_button), "clicked", G_CALLBACK(stop_cb), data);
 
-  data->slider =
-      gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
+  data->slider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
   gtk_scale_set_draw_value(GTK_SCALE(data->slider), 0);
-  data->slider_update_signal_id = g_signal_connect(
-      G_OBJECT(data->slider), "value-changed", G_CALLBACK(slider_cb), data);
+  data->slider_update_signal_id =
+      g_signal_connect(G_OBJECT(data->slider), "value-changed", G_CALLBACK(slider_cb), data);
 
   data->streams_list = gtk_text_view_new();
   gtk_text_view_set_editable(GTK_TEXT_VIEW(data->streams_list), FALSE);
@@ -174,13 +158,11 @@ static gboolean refresh_ui(CustomData *data) {
 
   /* If we didn't know it yet, query the stream duration */
   if (!GST_CLOCK_TIME_IS_VALID(data->duration)) {
-    if (!gst_element_query_duration(data->playbin, GST_FORMAT_TIME,
-                                    &data->duration)) {
+    if (!gst_element_query_duration(data->playbin, GST_FORMAT_TIME, &data->duration)) {
       g_error("Could not query current duration.\n");
     } else {
       /* Set the range of the slider to the clip duration, in SECONDS */
-      gtk_range_set_range(GTK_RANGE(data->slider), 0,
-                          (gdouble)data->duration / GST_SECOND);
+      gtk_range_set_range(GTK_RANGE(data->slider), 0, (gdouble)data->duration / GST_SECOND);
     }
   }
 
@@ -201,10 +183,8 @@ static gboolean refresh_ui(CustomData *data) {
 static void tags_cb(GstElement *playbin, gint stream, CustomData *data) {
   /* We are possibly in a GStreamer working thread, so we notify the main
    * thread of this event through a message in the bus */
-  gst_element_post_message(
-      playbin,
-      gst_message_new_application(GST_OBJECT(playbin),
-                                  gst_structure_new_empty("tags-changed")));
+  gst_element_post_message(playbin,
+                           gst_message_new_application(GST_OBJECT(playbin), gst_structure_new_empty("tags-changed")));
 }
 
 /* This function is called when an error message is posted on the bus */
@@ -214,8 +194,7 @@ static void error_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
 
   /* Print error details on the screen */
   gst_message_parse_error(msg, &err, &debug_info);
-  g_error("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src),
-          err->message);
+  g_error("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src), err->message);
   g_error("Debugging information: %s\n", debug_info ? debug_info : "none");
   g_clear_error(&err);
   g_free(debug_info);
@@ -334,8 +313,7 @@ static void analyze_streams(CustomData *data) {
 /* This function is called when an "application" message is posted on the bus.
  * Here we retrieve the message posted by the tags_cb callback */
 static void application_cb(GstBus *bus, GstMessage *msg, CustomData *data) {
-  if (g_strcmp0(gst_structure_get_name(gst_message_get_structure(msg)),
-                "tags-changed") == 0) {
+  if (g_strcmp0(gst_structure_get_name(gst_message_get_structure(msg)), "tags-changed") == 0) {
     /* If the message is the "tags-changed" (only one we are currently issuing),
      * update the stream info GUI */
     analyze_streams(data);
@@ -372,12 +350,9 @@ int main(int argc, char *argv[]) {
                NULL);
 
   /* Connect to interesting signals in playbin */
-  g_signal_connect(G_OBJECT(data.playbin), "video-tags-changed",
-                   (GCallback)tags_cb, &data);
-  g_signal_connect(G_OBJECT(data.playbin), "audio-tags-changed",
-                   (GCallback)tags_cb, &data);
-  g_signal_connect(G_OBJECT(data.playbin), "text-tags-changed",
-                   (GCallback)tags_cb, &data);
+  g_signal_connect(G_OBJECT(data.playbin), "video-tags-changed", (GCallback)tags_cb, &data);
+  g_signal_connect(G_OBJECT(data.playbin), "audio-tags-changed", (GCallback)tags_cb, &data);
+  g_signal_connect(G_OBJECT(data.playbin), "text-tags-changed", (GCallback)tags_cb, &data);
 
   /* Create the GUI */
   create_ui(&data);
@@ -388,10 +363,8 @@ int main(int argc, char *argv[]) {
   gst_bus_add_signal_watch(bus);
   g_signal_connect(G_OBJECT(bus), "message::error", (GCallback)error_cb, &data);
   g_signal_connect(G_OBJECT(bus), "message::eos", (GCallback)eos_cb, &data);
-  g_signal_connect(G_OBJECT(bus), "message::state-changed",
-                   (GCallback)state_changed_cb, &data);
-  g_signal_connect(G_OBJECT(bus), "message::application",
-                   (GCallback)application_cb, &data);
+  g_signal_connect(G_OBJECT(bus), "message::state-changed", (GCallback)state_changed_cb, &data);
+  g_signal_connect(G_OBJECT(bus), "message::application", (GCallback)application_cb, &data);
   gst_object_unref(bus);
 
   /* Start playing */
