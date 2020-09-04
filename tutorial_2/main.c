@@ -1,35 +1,37 @@
 #include <gst/gst.h>
-#include <stdbool.h>
 
 int main(int argc, char *argv[])
 {
-    GstElement *pipeline, *source, *sink;
+    GstElement *pipeline;
+    GstElement *source;
+    GstElement *sink;
     GstBus *bus;
     GstMessage *msg;
     GstStateChangeReturn ret;
-    gboolean terminate = FALSE;
 
+    /* Initialize GStreamer */
     gst_init(&argc, &argv);
 
+    /* Create the elements */
     source = gst_element_factory_make("videotestsrc", "source");
     sink = gst_element_factory_make("autovideosink", "sink");
 
+    /* Create the empty pipeline */
     pipeline = gst_pipeline_new("test-pipeline");
 
     if (!pipeline || !source || !sink)
     {
-        g_error("Not all elements could be created.\n");
+        g_error("Not all elements could be created.");
 
         return -1;
     }
 
     /* Build the pipeline */
     gst_bin_add_many(GST_BIN(pipeline), source, sink, NULL);
-
-    if (gst_element_link(source, sink) != true)
+    if (gst_element_link(source, sink) != TRUE)
     {
-        g_error("Elements could not be linked.\n");
-        gst_object_unref(pipeline);
+        g_error("Elements could not be linked.");
+        gst_object_unref("pipeline");
 
         return -1;
     }
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
     ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     if (ret == GST_STATE_CHANGE_FAILURE)
     {
-        g_error("Unable to set the pipeline to the playing state.\n");
+        g_error("Unable to set the pipeline to the playing state.");
         gst_object_unref(pipeline);
 
         return -1;
@@ -49,69 +51,41 @@ int main(int argc, char *argv[])
 
     /* Wait until error or EOS */
     bus = gst_element_get_bus(pipeline);
+    msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
 
-    do
+    /* Parsing message */
+    if (msg != NULL)
     {
-        msg = gst_bus_timed_pop_filtered(
-            bus,
-            GST_CLOCK_TIME_NONE,
-            GST_MESSAGE_STATE_CHANGED | GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
+        GError *err;
+        gchar *debug_info;
 
-        if (msg != NULL)
+        switch (GST_MESSAGE_TYPE(msg))
         {
-            GError *err;
-            gchar *debug_info;
+        case GST_MESSAGE_ERROR:
+            gst_message_parse_error(msg, &err, &debug_info);
 
-            switch (GST_MESSAGE_TYPE(msg))
-            {
-            case GST_MESSAGE_ERROR:
-                gst_message_parse_error(msg, &err, &debug_info);
-                g_error("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src), err->message);
-                g_error("Debugging information: %s\n", debug_info ? debug_info : "none");
+            g_error("Error received from element %s: %s", GST_OBJECT_NAME(msg->src), err->message);
+            g_error("Debugging information: %s", debug_info ? debug_info : "none");
 
-                g_clear_error(&err);
-                g_free(debug_info);
+            g_clear_error(&err);
+            g_free(debug_info);
 
-                terminate = TRUE;
-                break;
-            case GST_MESSAGE_EOS:
-                g_message("End-Of-Stream reached.\n");
+            break;
 
-                terminate = TRUE;
-                break;
+        case GST_MESSAGE_EOS:
+            g_message("End-Of-Stream rreached.");
 
-            case GST_MESSAGE_STATE_CHANGED:
-                /* We are only interested in state-changed message from the pipeline */
-                if (GST_MESSAGE_SRC(msg) == GST_OBJECT(pipeline))
-                {
-                    GstState old_state, new_state, pending_state;
+            break;
 
-                    gst_message_parse_state_changed(
-                        msg, &old_state, &new_state, &pending_state);
-                    g_message("Pipeline state change from %s to %s:\n",
-                              gst_element_state_get_name(old_state), gst_element_state_get_name(new_state));
+        default:
+            /* We should not reach here because we only asked for ERRORs and EOS */
+            g_error("Unexpected message received message type id: %d", GST_MESSAGE_TYPE(msg));
 
-                    /* Create graph per state change */
-                    GString *base_fname = g_string_new("");
-                    g_string_printf(base_fname, "pipeline-%s-%s", gst_element_state_get_name(old_state), gst_element_state_get_name(new_state));
-
-                    GstBin *bin = GST_BIN(pipeline);
-                    GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS(bin, GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE, base_fname->str);
-
-                    g_string_free(base_fname, TRUE);
-                }
-
-                break;
-            default:
-                /* We should not reach here */
-                g_error("Unexpected message received.\n");
-
-                break;
-            }
-
-            gst_message_unref(msg);
+            break;
         }
-    } while (!terminate);
+
+        gst_message_unref(msg);
+    }
 
     /* Free resources */
     gst_object_unref(bus);

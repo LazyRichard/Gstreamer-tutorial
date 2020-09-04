@@ -13,23 +13,24 @@ int main(int argc, char *argv[])
 
     source = gst_element_factory_make("videotestsrc", "source");
     filter = gst_element_factory_make("vertigotv", "filter");
+    convert = gst_element_factory_make("videoconvert", "videoconvert");
     sink = gst_element_factory_make("autovideosink", "sink");
 
     pipeline = gst_pipeline_new("test-pipeline");
 
-    if (!pipeline || !source || !sink || !filter)
+    if (!pipeline || !source || !filter || !convert || !sink)
     {
-        g_error("Not all elements could be created.\n");
+        g_error("Not all elements could be created.");
 
         return -1;
     }
 
     /* Build the pipeline */
-    gst_bin_add_many(GST_BIN(pipeline), source, filter, sink, NULL);
+    gst_bin_add_many(GST_BIN(pipeline), source, filter, convert, sink, NULL);
 
-    if (!gst_element_link_many(source, filter, sink, NULL))
+    if (!gst_element_link_many(source, filter, convert, sink, NULL))
     {
-        g_error("Elements could not be linked.\n");
+        g_error("Elements could not be linked.");
         gst_object_unref(pipeline);
 
         return -1;
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     if (ret == GST_STATE_CHANGE_FAILURE)
     {
-        g_error("Unable to set the pipeline to the playing state.\n");
+        g_error("Unable to set the pipeline to the playing state.");
         gst_object_unref(pipeline);
 
         return -1;
@@ -67,8 +68,8 @@ int main(int argc, char *argv[])
             {
             case GST_MESSAGE_ERROR:
                 gst_message_parse_error(msg, &err, &debug_info);
-                g_error("Error received from element %s: %s\n", GST_OBJECT_NAME(msg->src), err->message);
-                g_error("Debugging information: %s\n", debug_info ? debug_info : "none");
+                g_error("Error received from element %s: %s", GST_OBJECT_NAME(msg->src), err->message);
+                g_error("Debugging information: %s", debug_info ? debug_info : "none");
 
                 g_clear_error(&err);
                 g_free(debug_info);
@@ -76,7 +77,7 @@ int main(int argc, char *argv[])
                 terminate = TRUE;
                 break;
             case GST_MESSAGE_EOS:
-                g_message("End-Of-Stream reached.\n");
+                g_message("End-Of-Stream reached.");
 
                 terminate = TRUE;
                 break;
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
 
                     gst_message_parse_state_changed(
                         msg, &old_state, &new_state, &pending_state);
-                    g_message("Pipeline state change from %s to %s:\n",
+                    g_message("Pipeline state change from %s to %s:",
                               gst_element_state_get_name(old_state), gst_element_state_get_name(new_state));
 
                     /* Create graph per state change */
@@ -105,7 +106,7 @@ int main(int argc, char *argv[])
                 break;
             default:
                 /* We should not reach here */
-                g_error("Unexpected message received.\n");
+                g_error("Unexpected message received.");
 
                 break;
             }
