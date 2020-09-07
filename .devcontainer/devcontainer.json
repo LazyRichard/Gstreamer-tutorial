@@ -22,7 +22,8 @@
 	"extensions": [
 		"ms-vscode.cpptools",
 		"jaycetyle.vscode-gnu-global",
-		"eamodio.gitlens"
+		"eamodio.gitlens",
+		"ms-vscode.cmake-tools"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
