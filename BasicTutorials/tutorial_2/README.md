@@ -39,4 +39,5 @@ element는 GStreamer의 기본 구성 요소이다. source element에서 sink el
 * `gst_element_link()`를 이용해 각각의 element를 연결할 수 있다.
 
 # References
+
 * Gstreamer official tutorials - [Basic tutorial 2: GStreamer concepts](https://gstreamer.freedesktop.org/documentation/tutorials/basic/concepts.html?gi-language=c)
