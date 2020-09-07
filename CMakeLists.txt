@@ -25,3 +25,4 @@ include_directories(${GST_INCLUDE_DIRS})
 
 # Include sub-projects.
 add_subdirectory ("BasicTutorials")
+add_subdirectory ("Playbacktutorials")
