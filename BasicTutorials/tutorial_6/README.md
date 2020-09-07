@@ -197,3 +197,5 @@ pipeline의 상태가 변할 때마다 현재 Pad Caps를 출력한다. 예제�
 * Pad Caps는 `gst-inspect-1.0`을 통해 확인할 수 있다는 것
 
 # References
+
+* Gstreamer official tutorials - [Basic tutorial 6: Media formats and Pad Capabilities](https://gstreamer.freedesktop.org/documentation/tutorials/basic/time-management.html?gi-language=c)
