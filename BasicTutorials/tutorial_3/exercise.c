@@ -1,7 +1,7 @@
 #include <gst/gst.h>
 
 /* Structure to contain all out information, so we can pass it to callbacks */
-typedef struct _CustomDaat {
+typedef struct _CustomData {
   GstElement *pipeline;
   GstElement *source;
   GstElement *audioConvert;
