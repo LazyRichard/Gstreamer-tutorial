@@ -5,25 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Build and Launch active file",
-            "type": "cppdbg",
+            "name": "(vsdbg) Launch",
+            "type": "cppvsdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}.o",
+            "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
+            "environment": [
                 {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
+                    "name": "GST_PLUGIN_PATH",
+                    "value": "${workspaceFolder}/out/vscode/P.uginWritersGuide/gst-plugin-tutorial/plugins/Debug"
                 }
             ],
-            "preLaunchTask": "gcc gstreamer compile active file",
-            "miDebuggerPath": "/usr/bin/gdb"
+            "externalConsole": false,
         }
     ]
 }
