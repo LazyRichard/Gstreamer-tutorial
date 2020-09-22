@@ -4,7 +4,7 @@
  * Copyright (C) 2005 Ronald S. Bultje <rbultje@ronald.bitfreak.net>
  * Copyright (C) 2020 Niels De Graef <niels.degraef@gmail.com>
  * Copyright (C) 2020  <<user@hostname.org>>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -44,19 +44,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GST_HELLOWORLD_H__
-#define __GST_HELLOWORLD_H__
+#ifndef __GST_MYFILTER_H__
+#define __GST_MYFILTER_H__
 
 #include <gst/gst.h>
 
 G_BEGIN_DECLS
 
-#define GST_TYPE_HELLOWORLD (gst_helloworld_get_type())
-G_DECLARE_FINAL_TYPE (Gsthelloworld, gst_helloworld,
-    GST, PLUGIN_TEMPLATE, GstElement)
+#define GST_TYPE_MYFILTER (gst_my_filter_get_type())
+G_DECLARE_FINAL_TYPE(GstMyFilter, gst_my_filter, GST, MYFILTER, GstElement)
 
-struct _Gsthelloworld
-{
+struct _GstMyFilter {
   GstElement element;
 
   GstPad *sinkpad, *srcpad;
@@ -66,4 +64,4 @@ struct _Gsthelloworld
 
 G_END_DECLS
 
-#endif /* __GST_HELLOWORLD_H__ */
+#endif /* __GST_MYFILTER_H__ */

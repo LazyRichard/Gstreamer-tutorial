@@ -1,3 +1,3 @@
-add_library(helloworld SHARED gsthelloworld.c)
+add_library(myfilter SHARED gstmyfilter.c)
 
-target_compile_options(helloworld PUBLIC ${GST_CFLAGS_OTHER})
+target_compile_options(myfilter PUBLIC ${GST_CFLAGS_OTHER})
