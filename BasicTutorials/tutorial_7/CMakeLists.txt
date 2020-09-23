@@ -6,6 +6,4 @@ cmake_minimum_required (VERSION 3.8)
 # Add source to this project's executable.
 add_executable (tutorial_7 "main.c" )
 
-target_compile_options(tutorial_7 PUBLIC ${GST_CFLAGS_OTHER})
-
 # TODO: Add tests and install targets if needed.

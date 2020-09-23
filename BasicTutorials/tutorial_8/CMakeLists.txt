@@ -9,14 +9,12 @@ if ( NOT (GST_AUDIO_FOUND))
 endif()
 set(ENV{PKG_CONFIG_PATH})
 
-include_directories("${GST_AUDIO_INCLUDE_DIRS}")
-link_libraries(${GST_AUDIO_LIBRARIES})
-link_directories(${GST_AUDIO_LIBRARY_DIRS})
-include_directories(${GST_AUDIO_INCLUDE_DIRS})
-
 # Add source to this project's executable.
 add_executable (tutorial_8 "main.c" )
 
 target_compile_options(tutorial_8 PUBLIC ${GST_AUDIO_CFLAGS_OTHER})
+target_include_directories(tutorial_8 PUBLIC "${GST_AUDIO_INCLUDE_DIRS}")
+target_link_libraries(tutorial_8 PUBLIC ${GST_AUDIO_LIBRARIES})
+target_link_directories(tutorial_8 PUBLIC ${GST_AUDIO_LIBRARY_DIRS})
 
 # TODO: Add tests and install targets if needed.

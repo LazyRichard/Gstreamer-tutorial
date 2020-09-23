@@ -7,7 +7,4 @@ cmake_minimum_required (VERSION 3.8)
 add_executable (tutorial_3 "main.c" )
 add_executable (tutorial_3_exercise "exercise.c")
 
-target_compile_options(tutorial_3 PUBLIC ${GST_CFLAGS_OTHER})
-target_compile_options(tutorial_3_exercise PUBLIC ${GST_CFLAGS_OTHER})
-
 # TODO: Add tests and install targets if needed.
