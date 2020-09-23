@@ -14,11 +14,27 @@
             "cwd": "${workspaceFolder}",
             "environment": [
                 {
-                    "name": "GST_PLUGIN_PATH",
-                    "value": "${workspaceFolder}/out/vscode/P.uginWritersGuide/gst-plugin-tutorial/plugins/Debug"
+                    "name": "GST_PLUGIN_PATH_1_0",
+                    "value": "${workspaceFolder}\\out\\vscode\\PluginWritersGuide\\gst-plugin-tutorial\\plugins\\Debug"
                 }
             ],
             "externalConsole": false,
+        },
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "GST_PLUGIN_PATH_1_0",
+                    "value": "${workspaceFolder}/out/vscode/PluginWritersGuide/gst-plugin-tutorial/plugins"
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }
