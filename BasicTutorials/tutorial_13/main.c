@@ -1,3 +1,4 @@
+#include <gio/gio.h>
 #include <gst/gst.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,11 +18,29 @@ static void send_seek_event(CustomData *);
 /* Process keyboard input */
 static gboolean handle_keyboard(GIOChannel *, GIOCondition, CustomData *);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[], char *envp[]) {
   CustomData data;
   GIOChannel *io_stdin;
-  gchar *uri = "playbin uri=https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
+  gchar *file_path;
+  GFile *file;
+  char *file_name;
+  gchar *uri;
   GstStateChangeReturn ret = GST_STATE_CHANGE_FAILURE;
+
+  /* Parsing from env */
+  file_path = g_environ_getenv(envp, "FILE_PATH");
+  if (file_path == NULL)
+    g_error("FILE_PATH environment variable must be setted!");
+
+  file = g_file_new_for_path(file_path);
+  if (!g_file_query_exists(file, NULL))
+    g_error("Given path '%s' is not exist!", file_path);
+
+  file_name = g_file_get_uri(file);
+
+  uri = g_strconcat("playbin uri=", file_name, NULL);
+
+  g_object_unref(file);
 
   /* Initialize GStreamer */
   gst_init(&argc, &argv);
@@ -70,6 +89,8 @@ int main(int argc, char *argv[]) {
   if (data.video_sink != NULL)
     gst_object_unref(data.video_sink);
   gst_object_unref(data.pipeline);
+
+  g_free(uri);
 
   return 0;
 }
@@ -147,5 +168,5 @@ static gboolean handle_keyboard(GIOChannel *source, GIOCondition cond, CustomDat
 
   g_free(str);
 
-  return TRUE;
+  return 1;
 }
