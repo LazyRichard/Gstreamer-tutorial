@@ -163,6 +163,7 @@ static gboolean handle_keyboard(GIOChannel *source, GIOCondition cond, CustomDat
     g_main_loop_quit(data->loop);
     break;
   default:
+    g_warning("Unsupported %c", g_ascii_tolower(str[0]));
     break;
   }
 
