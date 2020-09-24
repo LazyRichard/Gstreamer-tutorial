@@ -16,9 +16,13 @@
                 {
                     "name": "GST_PLUGIN_PATH_1_0",
                     "value": "${workspaceFolder}\\out\\vscode\\PluginWritersGuide\\gst-plugin-tutorial\\plugins\\Debug"
+                },
+                {
+                    "name": "FILE_PATH",
+                    "value": "${workspaceFolder}\\sintel_trailer-480p.webm"
                 }
             ],
-            "externalConsole": false,
+            "externalConsole": true,
         },
         {
             "name": "(gdb) Launch",
@@ -34,7 +38,8 @@
                     "value": "${workspaceFolder}/out/vscode/PluginWritersGuide/gst-plugin-tutorial/plugins"
                 }
             ],
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "/usr/bin/gdb",
+            "externalConsole": true
         }
     ]
 }
